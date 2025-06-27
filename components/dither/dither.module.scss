@@ -1,3 +1,10 @@
-.dither {
-    color: var(--color);
+.dither-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    aspect-ratio: 16 / 9;
+    width: 100vw;
+    height: auto;
+    max-height: 100vh;
+    max-width: calc(100vh * (16 / 9));
 }

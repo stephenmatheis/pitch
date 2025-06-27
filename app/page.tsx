@@ -61,8 +61,6 @@ export default function Home() {
                     </ExtraLarge>
                 </Center>
             </Slide>
-
-            {/* Intro */}
         </main>
     );
 }
