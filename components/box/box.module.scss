@@ -1,0 +1,12 @@
+.box {
+    width: calc(100vw - 16ch);
+    max-width: calc(100vh * (16 / 9));
+    position: relative;
+
+    * {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+    }
+}

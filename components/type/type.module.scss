@@ -1,0 +1,20 @@
+.type {
+    position: relative;
+    font-family: inherit;
+    display: inline-block;
+
+    .hidden {
+        opacity: 0;
+    }
+
+    .visible {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+
+        span {
+            white-space: pre;
+        }
+    }
+}

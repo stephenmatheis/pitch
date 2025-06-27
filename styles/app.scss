@@ -1,0 +1,65 @@
+:root {
+    --primary: #ffffff;
+    --muted: #808080;
+    --color: #b3b3b3;
+    --background-color: #101010;
+    --container-color: #212121;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    line-height: 1;
+}
+
+html {
+    font-size: 16.5px;
+    background-color: var(--background-color);
+    color: var(--color);
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: var(--font-atkinson);
+    background-color: var(--background-color);
+    overflow: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary);
+    -webkit-tap-highlight-color: transparent;
+}
+
+button {
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+}
+
+main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100dvh;
+    width: 100dvw;
+}
+
+h1 {
+    font-family: var(--font-departure);
+    font-size: 44px;
+}
+
+h2 {
+    font-family: var(--font-departure);
+    font-size: 44px;
+}
+
+.pico8 {
+    font-family: var(--font-pico8);
+}

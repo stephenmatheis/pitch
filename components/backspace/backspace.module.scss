@@ -1,0 +1,9 @@
+.backspace {
+    position: relative;
+    font-family: inherit;
+    display: inline-block;
+
+    .text {
+        white-space: pre;
+    }
+}
