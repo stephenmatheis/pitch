@@ -1,0 +1,35 @@
+.workspace {
+    display: grid;
+    grid-template-columns: 50px auto 50px;
+    grid-template-rows: 50px auto 50px;
+    grid-template-areas:
+        'top top top'
+        'left content right'
+        'bottom bottom  bottom';
+    height: 100dvh;
+    width: 100dvw;
+
+    .top {
+        grid-area: top;
+    }
+
+    .left {
+        grid-area: left;
+    }
+
+    .content {
+        position: relative;
+        grid-area: content;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .right {
+        grid-area: right;
+    }
+
+    .bottom {
+        grid-area: bottom;
+    }
+}
