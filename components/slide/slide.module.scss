@@ -1,10 +1,10 @@
 .slide {
-    --scale: scale(1);
+    --scale: 1;
 
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) var(--scale);
+    transform: translate(-50%, -50%) scale(var(--scale));
     min-width: 1920px;
     min-height: 1080px;
     background-color: var(--container-color);

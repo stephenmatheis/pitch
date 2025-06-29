@@ -8,7 +8,7 @@ type SlideProps = React.HTMLAttributes<HTMLDivElement> & {
 };
 
 export function Slide({ children, className, ...props }: SlideProps) {
-    const [min, setMin] = useState(1);
+    const [min, setMin] = useState(0);
     const slideRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -37,15 +37,13 @@ export function Slide({ children, className, ...props }: SlideProps) {
     }, []);
 
     return (
-        <>
-            <div
-                {...props}
-                ref={slideRef}
-                style={{ '--scale': `scale(${min})` } as CSSProperties}
-                className={`${styles['slide']} ${className}`}
-            >
-                {children}
-            </div>
-        </>
+        <div
+            {...props}
+            ref={slideRef}
+            style={{ '--scale': min } as CSSProperties}
+            className={`${styles['slide']} ${className}`}
+        >
+            {children}
+        </div>
     );
 }

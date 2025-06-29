@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { TitleSlide } from '@/components/title-slide';
+import { IntroSlide } from '@/components/intro-slide';
 import styles from './workspace.module.scss';
-import { IntroSlide } from '../intro-slide';
 
 const slides = [<TitleSlide key="title" />, <IntroSlide key="info" />];
 

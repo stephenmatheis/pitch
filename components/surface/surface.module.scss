@@ -1,0 +1,7 @@
+.canvas-absolute {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(1920px / var(--scale));
+    height: calc(1080px / var(--scale));
+}
