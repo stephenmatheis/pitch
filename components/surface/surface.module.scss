@@ -1,7 +1,20 @@
 .canvas-absolute {
+    pointer-events: none;
     position: absolute;
     top: 0;
     left: 0;
     width: calc(1920px / var(--scale));
     height: calc(1080px / var(--scale));
+
+    & > div {
+        pointer-events: none !important;
+
+        & > div {
+            pointer-events: none;
+
+            canvas {
+                pointer-events: all;
+            }
+        }
+    }
 }
