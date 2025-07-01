@@ -6,7 +6,7 @@ import styles from './surface.module.scss';
 
 const size = 1;
 const gap = 1;
-const columns = 16;
+const columns = 15;
 const isometricRotation = new THREE.Euler(Math.atan(1 / Math.sqrt(2)), -Math.PI / 4, 0);
 
 function Box(props: ThreeElements['mesh']) {
@@ -25,23 +25,18 @@ function Box(props: ThreeElements['mesh']) {
 export function Surface() {
     return (
         <div className={styles['canvas-absolute']}>
-            {/* <Canvas orthographic camera={{ zoom: 29.75, position: [0, 0, 50] }}> */}
-            <Canvas
-                orthographic
-                camera={{ zoom: 150, position: [0, 0, 50] }}
-                gl={(defaults) => new THREE.WebGLRenderer({ ...defaults })}
-            >
+            <Canvas orthographic camera={{ zoom: 29.75, position: [0, 0, 50] }}>
                 {/* Lights */}
                 <ambientLight intensity={1} />
                 <directionalLight castShadow intensity={2.5} color="white" position={[-1, -1, 0]} />
                 {/* <pointLight color="white" intensity={100} position={[16, 0, 1]} /> */}
 
                 {/* Cubes */}
-                {Array.from({ length: 288 }).map((_, i) => {
+                {Array.from({ length: 240 }).map((_, i) => {
                     const x = i % columns;
                     const y = Math.floor(i / columns);
                     const posX = x + x * gap + 1;
-                    const posY = y + y * gap - (columns + 1);
+                    const posY = y + y * gap - columns;
 
                     return (
                         <group key={i}>
