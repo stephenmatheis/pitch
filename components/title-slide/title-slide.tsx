@@ -20,7 +20,9 @@ export function TitleSlide() {
 
     return (
         <Slide className={styles['title-slide']}>
-            {animate ? (
+            <Surface />
+
+            {/* {animate ? (
                 <Center>
                     <h1 style={{ marginBottom: '1rem' }}>
                         <Type text="next.gov" delay={3} onEnd={() => setShowSubtitle(true)} />
@@ -63,8 +65,7 @@ export function TitleSlide() {
                 </Center>
             ) : (
                 <TitleTemplate title="next.gov" subtitle={`${prefix} ${subtitles[selectedSubtitle]}`} />
-            )}
-            <Surface />
+            )} */}
         </Slide>
     );
 }

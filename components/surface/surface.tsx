@@ -1,68 +1,76 @@
 import * as THREE from 'three';
 import React, { useRef } from 'react';
-// import { Canvas, useFrame, ThreeElements } from '@react-three/fiber';
 import { Canvas, ThreeElements } from '@react-three/fiber';
-import { Grid, GizmoHelper, GizmoViewcube, OrbitControls, Edges } from '@react-three/drei';
+import { GizmoHelper, GizmoViewcube, Outlines, OrbitControls, Edges, Text } from '@react-three/drei';
 import styles from './surface.module.scss';
 
-const size = 0.75;
+const size = 1;
+const gap = 1;
+const columns = 16;
+const isometricRotation = new THREE.Euler(Math.atan(1 / Math.sqrt(2)), -Math.PI / 4, 0);
 
 function Box(props: ThreeElements['mesh']) {
     const meshRef = useRef<THREE.Mesh>(null!);
 
-    // useFrame((state, delta) => {
-    //     meshRef.current.rotation.x += delta / 10;
-    //     meshRef.current.rotation.y += delta / 10;
-    //     meshRef.current.rotation.z += delta / 10;
-    // });
-
     return (
-        <mesh {...props} ref={meshRef} scale={1}>
+        <mesh {...props} ref={meshRef} scale={1} rotation={isometricRotation}>
             <boxGeometry args={[size, size, size]} />
-            <meshToonMaterial color="#f1f1f3" />
-            <Edges linewidth={2} scale={1} color="#392e4e" />
+            <meshToonMaterial color="#ffffff" />
+            <Edges linewidth={2} scale={1} color="#000000" />
+            <Outlines thickness={0.05} color="hotpink" />
         </mesh>
     );
 }
 
 export function Surface() {
-    const gridSize: [number, number] = [10.5, 10.5];
-    const gridConfig = {
-        // cellSize: 0.6,
-        cellSize: size,
-        cellThickness: 1,
-        cellColor: '#6f6f6f',
-        sectionSize: 3.3,
-        sectionThickness: 1.5,
-        sectionColor: '#9d4b4b',
-        // fadeDistance: 25,
-        // fadeStrength: 1,
-        followCamera: false,
-        infiniteGrid: true,
-    };
-
     return (
         <div className={styles['canvas-absolute']}>
-            <Canvas orthographic camera={{ zoom: 50, position: [25, 25, 50] }}>
-                {/* <Canvas> */}
-                <ambientLight intensity={8} />
-                {Array.from({ length: 64 }).map((_, i) => {
-                    const x = i % 8;
-                    const y = Math.floor(i / 8);
+            {/* <Canvas orthographic camera={{ zoom: 29.75, position: [0, 0, 50] }}> */}
+            <Canvas
+                orthographic
+                camera={{ zoom: 150, position: [0, 0, 50] }}
+                gl={(defaults) => new THREE.WebGLRenderer({ ...defaults })}
+            >
+                {/* Lights */}
+                <ambientLight intensity={1} />
+                <directionalLight castShadow intensity={2.5} color="white" position={[-1, -1, 0]} />
+                {/* <pointLight color="white" intensity={100} position={[16, 0, 1]} /> */}
 
-                    console.log(`${i}: [${x}, ${y}]`);
+                {/* Cubes */}
+                {Array.from({ length: 288 }).map((_, i) => {
+                    const x = i % columns;
+                    const y = Math.floor(i / columns);
+                    const posX = x + x * gap + 1;
+                    const posY = y + y * gap - (columns + 1);
 
-                    return <Box key={i} position={[x - 3.5, y - 4, 0]} />;
+                    return (
+                        <group key={i}>
+                            <Box position={[posX, posY, 0.5]} />{' '}
+                            <Text
+                                color="black"
+                                position={[posX - 0.375, posY - 0.25, 1]}
+                                fontSize={0.5}
+                                rotation={isometricRotation}
+                            >
+                                {i + 1}
+                            </Text>
+                        </group>
+                    );
                 })}
 
-                {/* <Grid position={[0, -4, 0]} args={gridSize} {...gridConfig} /> */}
-                <gridHelper position={[4, 0, 0]} rotation={new THREE.Euler(Math.PI / 2, 0, 0)} />
-                {/* <planeHelper args={[new THREE.Plane(new THREE.Vector3(1, 1, 1), 1)]} /> */}
+                {/* Helpers */}
+                <gridHelper
+                    args={[128, 64, '#FF0000', '#ffffff']}
+                    position={[0, 0, 0]}
+                    rotation={new THREE.Euler(Math.PI / 2, 0, 0)}
+                />
                 <axesHelper args={[20]} />
-                <OrbitControls makeDefault />
                 <GizmoHelper alignment="bottom-right" margin={[80, 80]}>
                     <GizmoViewcube />
                 </GizmoHelper>
+
+                {/* Controls */}
+                <OrbitControls makeDefault />
             </Canvas>
         </div>
     );
