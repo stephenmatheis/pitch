@@ -4,16 +4,17 @@
     left: 0;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     height: 100%;
     width: 100%;
     padding: 1in;
 
     .title {
-        font-size: 55px;
-        margin-bottom: 55px;
+        font-size: 44px;
+        margin-bottom: 1rem;
     }
 
     .subtitle {
-        font-size: 77px;
+        font-size: 44px;
     }
 }

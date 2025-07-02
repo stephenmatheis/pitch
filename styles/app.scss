@@ -5,7 +5,7 @@
     // --background-color: #101010;
     // --container-color: #212121;
     --color: #f1f1f3;
-    --background-color: #060010;
+    --background-color: rgb(27, 13, 24);
     --container-color: #060010;
     --border-color: #392e4e;
 }
@@ -15,6 +15,7 @@
     padding: 0;
     box-sizing: border-box;
     line-height: 1;
+    font-weight: normal;
 }
 
 html {
@@ -58,4 +59,8 @@ h2 {
 
 .pico8 {
     font-family: var(--font-pico8);
+}
+
+.pixel {
+    font-family: var(--font-pixel);
 }

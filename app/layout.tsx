@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 import '@/styles/app.scss';
+import { R3FProvider } from '@/providers/r3f-provider';
 
 const departure = localFont({
     src: './fonts/DepartureMono-Regular.woff2',
@@ -15,6 +16,11 @@ const atkinson = localFont({
 const pico8 = localFont({
     src: './fonts/Pico8.woff2',
     variable: '--font-pico8',
+});
+
+const pixel = localFont({
+    src: './fonts/Pixel.woff2',
+    variable: '--font-pixel',
 });
 
 export const metadata: Metadata = {
@@ -49,8 +55,11 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en" suppressHydrationWarning>
-            <body className={`${departure.variable} ${atkinson.variable} ${pico8.variable}`} suppressHydrationWarning>
-                {children}
+            <body
+                className={`${departure.variable} ${atkinson.variable} ${pico8.variable} ${pixel.variable}`}
+                suppressHydrationWarning
+            >
+                <R3FProvider>{children}</R3FProvider>
             </body>
         </html>
     );
