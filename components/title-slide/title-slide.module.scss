@@ -7,5 +7,18 @@
         left: 0;
         height: 100%;
         width: 100%;
+
+        .arrow {
+            transform-box: fill-box;
+
+            &.right {
+                transform-origin: right left !important;
+            }
+
+            &.left {
+                // opacity: 0;
+                transform-origin: left right !important;
+            }
+        }
     }
 }

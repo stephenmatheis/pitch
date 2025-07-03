@@ -1,9 +1,9 @@
-import { useState } from 'react';
+'use client';
+
+import { useEffect, useState } from 'react';
 import * as motion from 'motion/react-client';
 import { Slide } from '@/components/slide';
 import { Surface } from '@/components/surface';
-import { Center } from '@/components/center';
-import { ExtraLarge } from '@/components/extra-large';
 import { Type } from '@/components/type';
 import { Backspace } from '@/components/backspace';
 import { TitleTemplate } from '@/components/title-template';
@@ -12,104 +12,97 @@ import styles from './title-slide.module.scss';
 
 const prefix = 'Next Generation';
 const subtitles = ['Digital Government', 'Developer Experience', 'Accessible Websites', 'Intelligence'];
-const lineEnd = 1200;
-const lineYPosition = 540;
+const x = 1728;
+const y = 540;
+const r = 64;
+const cd = `M ${x},${y} A ${r},${r} 0 1 1 ${x},${y + 1}`;
+const transition = { type: 'spring' as const, duration: 1, bounce: 0.3 };
+const shape: React.CSSProperties = {
+    stroke: 'white',
+    strokeLinecap: 'square',
+    strokeWidth: 10,
+};
 
 export function TitleSlide() {
-    const [showSubtitle, setShowSubtitle] = useState(false);
     const [selectedSubtitle, setSelectedSubtitle] = useState(0);
-    const [type, setType] = useState(true);
+    const [showSubtitle, setShowSubtitle] = useState(false);
     const [firstPass, setFirstPass] = useState(true);
+    const [type, setType] = useState(true);
+    const [phase, setPhase] = useState<number>(0);
     const { shouldType, showCanvas } = useR3F();
-    const [startArrows, setStartArrows] = useState(false);
-    const [animateLine, setAnimateLine] = useState<'start' | 'middle' | 'end'>('start');
-    const [animateArrows, setAnimateArrows] = useState<'grow' | 'rotate'>('grow');
+
+    useEffect(() => {
+        if (phase === 0) {
+            setPhase(1);
+        }
+    }, [phase]);
 
     return (
         <Slide className={styles['title-slide']}>
             {showCanvas && <Surface />}
 
             <svg className={styles.lines} viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
-                <motion.line
-                    initial={{ x1: 0, y1: lineYPosition, x2: 0, y2: lineYPosition }}
-                    animate={animateLine}
-                    variants={{
-                        start: { x1: 0, y1: lineYPosition, x2: lineEnd, y2: lineYPosition },
-                        middle: { x1: 0, y1: lineYPosition, x2: 1400, y2: lineYPosition },
-                        end: { x1: lineEnd, y1: lineYPosition, x2: lineEnd, y2: lineYPosition },
-                    }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                    stroke="white"
-                    strokeWidth={10}
-                    onAnimationComplete={() => {
-                        if (animateLine === 'start') setStartArrows(true);
-                    }}
-                />
-                {startArrows && (
+                {phase >= 1 && (
+                    <motion.path
+                        initial={{ d: `M 0,${y} L 0,${y}`, pathLength: 0 }}
+                        animate={{ d: `M 0,${y} L ${x},${y}`, pathLength: 1 }}
+                        onAnimationComplete={() => setPhase(2)}
+                        transition={transition}
+                        style={shape}
+                    />
+                )}
+
+                {phase >= 2 && (
                     <>
-                        <motion.line
-                            style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
-                            initial={{ x1: lineEnd, y1: lineYPosition, x2: lineEnd, y2: lineYPosition }}
-                            animate={animateArrows}
-                            variants={{
-                                grow: {
-                                    x1: lineEnd,
-                                    y1: lineYPosition,
-                                    x2: lineEnd - 100,
-                                    y2: lineYPosition - 100,
-                                },
-                                rotate: {
-                                    rotate: 90,
-                                    x1: lineEnd,
-                                    y1: lineYPosition,
-                                    x2: lineEnd - 100,
-                                    y2: lineYPosition - 100,
-                                },
+                        <motion.path
+                            initial={{
+                                d: cd,
+                                pathLength: 0,
                             }}
-                            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                            stroke="white"
-                            strokeLinecap="square"
-                            strokeWidth={10}
-                        />
-                        <motion.line
-                            style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
-                            initial={{ x1: lineEnd, y1: lineYPosition, x2: lineEnd, y2: lineYPosition }}
-                            animate={animateArrows}
-                            variants={{
-                                grow: {
-                                    x1: lineEnd,
-                                    y1: lineYPosition,
-                                    x2: lineEnd - 100,
-                                    y2: lineYPosition + 100,
-                                },
-                                rotate: {
-                                    rotate: -90,
-                                    x1: lineEnd,
-                                    y1: lineYPosition,
-                                    x2: lineEnd - 100,
-                                    y2: lineYPosition + 100,
-                                },
+                            animate={{
+                                d: cd,
+                                pathLength: 1,
                             }}
-                            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                            stroke="white"
-                            strokeLinecap="square"
-                            strokeWidth={10}
-                            onAnimationComplete={() => {
-                                setAnimateLine('middle');
-                                setAnimateArrows('rotate');
+                            transition={transition}
+                            style={shape}
+                            onAnimationStart={() => {
+                                setTimeout(() => {
+                                    setPhase(3);
+                                }, 500);
                             }}
                         />
                     </>
                 )}
+
+                {phase >= 3 && (
+                    <motion.path
+                        initial={{
+                            d: `M ${x + r},${y + r} L ${x + r},${y + r}`,
+                            pathLength: 0,
+                        }}
+                        animate={{
+                            d: `M ${x + r},${y + r} L ${x + r},${y + r + 440}`,
+                            pathLength: 1,
+                        }}
+                        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                        style={shape}
+                        onAnimationComplete={() => setPhase(4)}
+                    />
+                )}
             </svg>
 
+            <button
+                style={{ position: 'absolute', top: '1in', right: '1in', zIndex: 1000, fontSize: 44 }}
+                onClick={() => setPhase((prev) => (prev === 4 ? 0 : prev + 1))}
+            >
+                Redo Animation
+            </button>
+
             {shouldType ? (
-                <Center>
-                    <h1 style={{ marginBottom: '1rem' }}>
-                        <Type text="next.gov" delay={3} onEnd={() => setShowSubtitle(true)} />
-                    </h1>
-                    <ExtraLarge style={{ opacity: showSubtitle ? 1 : 0 }}>
-                        <h2>
+                <TitleTemplate
+                    title={<Type text="next.gov" delay={3} onEnd={() => setShowSubtitle(true)} />}
+                    subtitle={
+                        <div style={{ opacity: showSubtitle ? 1 : 0 }}>
                             {!showSubtitle ? (
                                 subtitles[selectedSubtitle]
                             ) : (
@@ -144,9 +137,9 @@ export function TitleSlide() {
                                     )}
                                 </>
                             )}
-                        </h2>
-                    </ExtraLarge>
-                </Center>
+                        </div>
+                    }
+                />
             ) : (
                 <TitleTemplate title="next.gov" subtitle={`${prefix} ${subtitles[selectedSubtitle]}`} />
             )}
