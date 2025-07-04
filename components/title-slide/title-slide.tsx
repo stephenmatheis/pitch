@@ -16,11 +16,38 @@ const x = 1728;
 const y = 540;
 const r = 64;
 const cd = `M ${x},${y} A ${r},${r} 0 1 1 ${x},${y + 1}`;
-const transition = { type: 'spring' as const, duration: 1, bounce: 0.3 };
 const shape: React.CSSProperties = {
     stroke: 'white',
     strokeLinecap: 'square',
     strokeWidth: 10,
+};
+const duration = 0.5;
+const transitions = {
+    linear: {
+        ease: 'linear' as const,
+        duration,
+    },
+    easeIn: {
+        ease: 'easeIn' as const,
+        duration,
+    },
+    easeOut: {
+        ease: 'easeOut' as const,
+        duration,
+    },
+    easeInOut: {
+        ease: 'easeInOut' as const,
+        duration,
+    },
+    spring: {
+        type: 'spring' as const,
+        stiffness: 300,
+        damping: 20,
+    },
+    springWithDuration: {
+        type: 'spring' as const,
+        duration,
+    },
 };
 
 export function TitleSlide() {
@@ -30,6 +57,7 @@ export function TitleSlide() {
     const [type, setType] = useState(true);
     const [phase, setPhase] = useState<number>(0);
     const [auto, setAuto] = useState(false);
+    const [selectedTransition, setSelectedTransition] = useState<string>('linear');
     const { shouldType, showCanvas } = useR3F();
 
     useEffect(() => {
@@ -54,8 +82,7 @@ export function TitleSlide() {
                     next: { y: '-100%' },
                 }}
                 animate={phase >= 4 ? 'next' : 'initial'}
-                // transition={{ type: 'spring', duration: 5, bounce: 0.1 }}
-                transition={{ ease: 'linear', duration: 2 }}
+                transition={transitions[selectedTransition]}
             >
                 <div style={{ position: 'absolute', top: '1in', left: '1in', fontSize: 33 }}>Slide 1</div>
 
@@ -69,7 +96,7 @@ export function TitleSlide() {
                                     setPhase(2);
                                 }
                             }}
-                            transition={transition}
+                            transition={transitions[selectedTransition]}
                             style={shape}
                         />
                     )}
@@ -85,13 +112,13 @@ export function TitleSlide() {
                                     d: cd,
                                     pathLength: 1,
                                 }}
-                                transition={transition}
+                                transition={transitions[selectedTransition]}
                                 style={shape}
                                 onAnimationStart={() => {
                                     if (auto) {
                                         setTimeout(() => {
                                             setPhase(3);
-                                        }, 500);
+                                        }, duration * 1000);
                                     }
                                 }}
                             />
@@ -108,14 +135,15 @@ export function TitleSlide() {
                                 d: `M ${x + r},${y + r} L ${x + r},1080`,
                                 pathLength: 1,
                             }}
-                            // transition={transition}
-                            transition={{ ease: 'linear', duration: 2 }}
+                            transition={transitions[selectedTransition]}
                             style={shape}
-                            // onAnimationStart={() => {
-                            //     setTimeout(() => {
-                            //         setPhase(4);
-                            //     }, 100);
-                            // }}
+                            onAnimationStart={() => {
+                                if (auto) {
+                                    setTimeout(() => {
+                                        setPhase(4);
+                                    }, duration * 1000);
+                                }
+                            }}
                         />
                     )}
                 </svg>
@@ -166,24 +194,19 @@ export function TitleSlide() {
                 )}
             </motion.div>
 
-            {/* NOTE: Intro Card */}
+            {/* Intro Card */}
             {phase >= 4 && (
                 <motion.div
                     className={styles.card}
-                    // style={{ backgroundColor: 'darkslateblue' }}
                     data-card="intro"
                     initial={{ y: '100%' }}
                     animate={{ y: 0 }}
-                    // transition={{ type: 'spring', duration: 1.5, bounce: 0.05 }}
-                    transition={{ ease: 'linear', duration: 2 }}
-                    // onAnimationStart={() => {
-                    //     setTimeout(() => {
-                    //         setPhase(5);
-                    //     }, 1500);
-                    // }}
-                    onAnimationEnd={() => {
+                    transition={transitions[selectedTransition]}
+                    onAnimationStart={() => {
                         if (auto) {
-                            setPhase(5);
+                            setTimeout(() => {
+                                setPhase(5);
+                            }, duration * 1000);
                         }
                     }}
                 >
@@ -200,17 +223,20 @@ export function TitleSlide() {
                                     d: `M ${x + r},0 L ${x + r},540`,
                                     pathLength: 1,
                                 }}
-                                // transition={transition}
-                                transition={{ ease: 'linear', duration: 2 }}
+                                transition={transitions[selectedTransition]}
                                 style={shape}
-                                // onAnimationComplete={() => setPhase(6)}
+                                onAnimationEnd={() => {
+                                    if (auto) {
+                                        setPhase(6);
+                                    }
+                                }}
                             />
                         </svg>
                     )}
                 </motion.div>
             )}
 
-            {/* DEV: Redo Animation */}
+            {/* TOOLS: Slide Controls */}
             <div
                 className={styles.controls}
                 style={{
@@ -221,9 +247,23 @@ export function TitleSlide() {
                     fontSize: 44,
                     display: 'flex',
                     flexDirection: 'column',
+                    alignItems: 'flex-end',
                     gap: '2rem',
                 }}
             >
+                <div className={styles.transition}>
+                    {Object.keys(transitions).map((key) => {
+                        return (
+                            <button
+                                key={key}
+                                className={selectedTransition === key ? styles.selected : ''}
+                                onClick={() => setSelectedTransition(key)}
+                            >
+                                {key}
+                            </button>
+                        );
+                    })}
+                </div>
                 <div
                     className={styles.buttons}
                     style={{
@@ -231,7 +271,7 @@ export function TitleSlide() {
                         fontSize: 44,
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'space-between',
+                        justifyContent: 'flex-end',
                         gap: '2ch',
                     }}
                 >
@@ -265,13 +305,7 @@ export function TitleSlide() {
                         {auto ? 'Auto' : <s>Auto</s>}
                     </button>
                 </div>
-                <div
-                    style={{
-                        flex: 1,
-                    }}
-                >
-                    Phase: {phase}
-                </div>
+                <div>Phase: {phase}</div>
             </div>
         </Slide>
     );

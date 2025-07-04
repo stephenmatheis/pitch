@@ -27,4 +27,22 @@
             box-shadow: 0px 0px 0px 2px var(--border-color);
         }
     }
+
+    .transition {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2ch;
+        font-size: 33px;
+
+        button {
+            &.selected {
+                color: var(--primary);
+            }
+
+            &:not(.selected) {
+                color: var(--muted);
+            }
+        }
+    }
 }
