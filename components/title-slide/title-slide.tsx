@@ -21,7 +21,7 @@ const shape: React.CSSProperties = {
     strokeLinecap: 'square',
     strokeWidth: 10,
 };
-const duration = 0.5;
+const duration = 2;
 const transitions = {
     linear: {
         ease: 'linear' as const,
@@ -132,7 +132,8 @@ export function TitleSlide() {
                                 pathLength: 0,
                             }}
                             animate={{
-                                d: `M ${x + r},${y + r} L ${x + r},1080`,
+                                // d: `M ${x + r},${y + r} L ${x + r},1080`,
+                                d: `M ${x + r},${y + r} L ${x + r},${1080 + 0}`,
                                 pathLength: 1,
                             }}
                             transition={transitions[selectedTransition]}
@@ -141,7 +142,7 @@ export function TitleSlide() {
                                 if (auto) {
                                     setTimeout(() => {
                                         setPhase(4);
-                                    }, duration * 1000);
+                                    }, duration * 0);
                                 }
                             }}
                         />
@@ -206,7 +207,8 @@ export function TitleSlide() {
                         if (auto) {
                             setTimeout(() => {
                                 setPhase(5);
-                            }, duration * 1000);
+                            }, duration * 0);
+                            // }, duration * 1000);
                         }
                     }}
                 >
@@ -223,7 +225,8 @@ export function TitleSlide() {
                                     d: `M ${x + r},0 L ${x + r},540`,
                                     pathLength: 1,
                                 }}
-                                transition={transitions[selectedTransition]}
+                                // transition={transitions[selectedTransition]}
+                                transition={{ duration: 0 }}
                                 style={shape}
                                 onAnimationEnd={() => {
                                     if (auto) {
