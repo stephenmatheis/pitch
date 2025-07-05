@@ -45,4 +45,25 @@
             }
         }
     }
+
+    .text {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+        padding: 1in;
+
+        .title {
+            font-size: 44px;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 44px;
+        }
+    }
 }

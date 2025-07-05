@@ -6,7 +6,6 @@ import { Slide } from '@/components/slide';
 import { Surface } from '@/components/surface';
 import { Type } from '@/components/type';
 import { Backspace } from '@/components/backspace';
-import { TitleTemplate } from '@/components/title-template';
 import { useR3F } from '@/providers/r3f-provider';
 import styles from './title-slide.module.scss';
 
@@ -132,7 +131,6 @@ export function TitleSlide() {
                                 pathLength: 0,
                             }}
                             animate={{
-                                // d: `M ${x + r},${y + r} L ${x + r},1080`,
                                 d: `M ${x + r},${y + r} L ${x + r},${1080 + 0}`,
                                 pathLength: 1,
                             }}
@@ -149,49 +147,54 @@ export function TitleSlide() {
                     )}
                 </svg>
                 {shouldType ? (
-                    <TitleTemplate
-                        title={<Type text="next.gov" delay={3} onEnd={() => setShowSubtitle(true)} />}
-                        subtitle={
-                            <div style={{ opacity: showSubtitle ? 1 : 0 }}>
-                                {!showSubtitle ? (
-                                    subtitles[selectedSubtitle]
-                                ) : (
-                                    <>
-                                        {!firstPass && <>{prefix} </>}
-                                        {type ? (
-                                            <Type
-                                                text={
-                                                    firstPass
-                                                        ? `${prefix} ${subtitles[selectedSubtitle]}`
-                                                        : subtitles[selectedSubtitle]
-                                                }
-                                                onEnd={() => {
-                                                    if (firstPass) setFirstPass(false);
+                    <div className={styles.text}>
+                        <h1 className={styles.title}>
+                            <Type text="next.gov" delay={3} onEnd={() => setShowSubtitle(true)} />
+                        </h1>
+                        <h2 style={{ opacity: showSubtitle ? 1 : 0 }}>
+                            {!showSubtitle ? (
+                                subtitles[selectedSubtitle]
+                            ) : (
+                                <>
+                                    {!firstPass && <>{prefix} </>}
+                                    {type ? (
+                                        <Type
+                                            text={
+                                                firstPass
+                                                    ? `${prefix} ${subtitles[selectedSubtitle]}`
+                                                    : subtitles[selectedSubtitle]
+                                            }
+                                            onEnd={() => {
+                                                if (firstPass) setFirstPass(false);
 
-                                                    setTimeout(() => {
-                                                        setType(false);
-                                                    }, 3000);
-                                                }}
-                                            />
-                                        ) : (
-                                            <Backspace
-                                                text={subtitles[selectedSubtitle]}
-                                                onEnd={() => {
-                                                    setSelectedSubtitle((prev) =>
-                                                        prev === subtitles.length - 1 ? 0 : prev + 1
-                                                    );
+                                                setTimeout(() => {
+                                                    setType(false);
+                                                }, 3000);
+                                            }}
+                                        />
+                                    ) : (
+                                        <Backspace
+                                            text={subtitles[selectedSubtitle]}
+                                            onEnd={() => {
+                                                setSelectedSubtitle((prev) =>
+                                                    prev === subtitles.length - 1 ? 0 : prev + 1
+                                                );
 
-                                                    setType(true);
-                                                }}
-                                            />
-                                        )}
-                                    </>
-                                )}
-                            </div>
-                        }
-                    />
+                                                setType(true);
+                                            }}
+                                        />
+                                    )}
+                                </>
+                            )}
+                        </h2>
+                    </div>
                 ) : (
-                    <TitleTemplate title="next.gov" subtitle={`${prefix} ${subtitles[selectedSubtitle]}`} />
+                    <div className={styles.text}>
+                        <h1 className={styles.title}>next.gov</h1>
+                        <h2 className={styles.subtitle}>
+                            {prefix} {subtitles[selectedSubtitle]}
+                        </h2>
+                    </div>
                 )}
             </motion.div>
 
@@ -208,7 +211,6 @@ export function TitleSlide() {
                             setTimeout(() => {
                                 setPhase(5);
                             }, duration * 0);
-                            // }, duration * 1000);
                         }
                     }}
                 >
@@ -225,7 +227,6 @@ export function TitleSlide() {
                                     d: `M ${x + r},0 L ${x + r},540`,
                                     pathLength: 1,
                                 }}
-                                // transition={transitions[selectedTransition]}
                                 transition={{ duration: 0 }}
                                 style={shape}
                                 onAnimationEnd={() => {
